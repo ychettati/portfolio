@@ -16,22 +16,22 @@ export const T = {
       skillsSub: "Une approche curieuse, appliquée et orientée utilisateur.",
       values: [
         {
-          icon: "💎",
+          icon: "Layers",          
           title: "Frameworks",
           desc: "Bonne expérience avec plusieurs environnements comme Symfony, Angular, Ionic, React ou Godot.",
         },
         {
-          icon: "👁️",
+          icon: "Rss",
           title: "Veille techno",
           desc: "J’aime découvrir de nouveaux outils et suivre les bonnes pratiques du développement.",
         },
         {
-          icon: "👥",
+          icon: "MousePointer",
           title: "Ergonomie",
           desc: "Je fais attention à concevoir des interfaces claires, simples et agréables à utiliser.",
         },
         {
-          icon: "🧡",
+          icon: "Flame",
           title: "Implication",
           desc: "Je m’investis pleinement dans mes projets, avec le souci de produire un résultat propre et utile.",
         },
@@ -193,22 +193,22 @@ export const T = {
       skillsSub: "A curious, committed and user-oriented approach.",
       values: [
         {
-          icon: "💎",
+          icon: "Layers",
           title: "Frameworks",
           desc: "Good experience with several environments such as Symfony, Angular, Ionic, React and Godot.",
         },
         {
-          icon: "👁️",
+          icon: "Rss",
           title: "Tech watch",
           desc: "I enjoy discovering new tools and keeping up with good development practices.",
         },
         {
-          icon: "👥",
+          icon: "MousePointer",
           title: "Usability",
           desc: "I pay attention to designing clear, simple and pleasant-to-use interfaces.",
         },
         {
-          icon: "🧡",
+          icon: "Flame",
           title: "Commitment",
           desc: "I fully invest myself in my projects, with the aim of producing clean and useful results.",
         },

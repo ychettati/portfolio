@@ -1,10 +1,19 @@
+import { Layers, Rss, MousePointer, Flame } from "lucide-react";
 import { C } from "../constants/colors";
 import ParticleCanvas from "./ParticleCanvas";
 import SectionTitle from "./SectionTitle";
 
+const ICON_MAP = {
+  Layers,
+  Rss,
+  MousePointer,
+  Flame,
+};
+
 export default function About({ t }) {
   return (
     <>
+      {/* ── Section présentation ── */}
       <section
         id="about"
         style={{
@@ -42,6 +51,7 @@ export default function About({ t }) {
             </h2>
 
             <div
+              aria-hidden="true"
               style={{
                 width: 50,
                 height: 4,
@@ -68,6 +78,7 @@ export default function About({ t }) {
                 lineHeight: 1.8,
                 fontSize: "1rem",
                 marginBottom: "2rem",
+                whiteSpace: "pre-line",
               }}
             >
               {t.about.p2}
@@ -100,12 +111,7 @@ export default function About({ t }) {
           </div>
 
           {t.about.photo && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{
                   width: "min(320px, 80vw)",
@@ -134,6 +140,7 @@ export default function About({ t }) {
         </div>
       </section>
 
+      {/* ── Section valeurs / ce qui me caractérise ── */}
       <section
         style={{
           background: "#fff",
@@ -148,41 +155,79 @@ export default function About({ t }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
-              gap: "2rem",
+              gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+              gap: "1.5rem",
               textAlign: "center",
             }}
           >
-            {t.about.values.map((v, i) => (
-              <div key={i} style={{ padding: "1.5rem 1rem" }}>
-                <div style={{ fontSize: "2.5rem", marginBottom: ".75rem" }}>
-                  {v.icon}
+            {t.about.values.map((v, i) => {
+              const Icon = ICON_MAP[v.icon];
+              return (
+                <div
+                  key={i}
+                  style={{
+                    padding: "2rem 1.5rem",
+                    borderRadius: 12,
+                    background: "#fafafa",
+                    border: "1px solid #f0f0f0",
+                    transition: "box-shadow .25s, transform .25s",
+                    cursor: "default",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow =
+                      "0 8px 28px rgba(232,73,29,0.12)";
+                    e.currentTarget.style.transform = "translateY(-4px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "none";
+                  }}
+                >
+                  {/* Cercle avec icône */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      width: 58,
+                      height: 58,
+                      borderRadius: "50%",
+                      background: C.orange + "15",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 1.1rem",
+                    }}
+                  >
+                    {Icon && (
+                      <Icon size={26} color={C.orange} strokeWidth={1.8} />
+                    )}
+                  </div>
+
+                  <h3
+                    style={{
+                      fontFamily: "Montserrat,sans-serif",
+                      fontWeight: 700,
+                      fontSize: ".92rem",
+                      color: C.dark,
+                      marginBottom: ".6rem",
+                      textTransform: "uppercase",
+                      letterSpacing: ".06em",
+                    }}
+                  >
+                    {v.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      color: C.text,
+                      fontSize: ".88rem",
+                      lineHeight: 1.65,
+                    }}
+                  >
+                    {v.desc}
+                  </p>
                 </div>
-
-                <h3
-                  style={{
-                    fontFamily: "Montserrat,sans-serif",
-                    fontWeight: 700,
-                    fontSize: "1rem",
-                    color: C.dark,
-                    marginBottom: ".5rem",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {v.title}
-                </h3>
-
-                <p
-                  style={{
-                    color: C.text,
-                    fontSize: ".88rem",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {v.desc}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

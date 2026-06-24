@@ -23,7 +23,7 @@ export default function Hero({ t }) {
           position: "relative",
           zIndex: 1,
           textAlign: "center",
-          padding: "80px clamp(1.2rem, 6vw, 4rem) 2rem",
+          padding: "80px clamp(1.2rem, 4vw, 6rem) 2rem",
           animation: "fadeUp .9s ease both",
           maxWidth: "100%",
           width: "100%",
@@ -39,11 +39,12 @@ export default function Hero({ t }) {
             color: "#fff",
             textTransform: "uppercase",
             letterSpacing: "-.02em",
-            fontSize: "clamp(1.3rem, 5vw, 3.5rem)",
-            lineHeight: 1.15,
-            marginBottom: "1rem",
+            fontSize: "clamp(1.4rem, 5.5vw, 4rem)",
+            lineHeight: 1.1,
+            marginBottom: "1.2rem",
             whiteSpace: "pre-line",
-            maxWidth: 900,
+            maxWidth: 1100,
+            width: "100%",
           }}
         >
           {t.hero.headline}
@@ -56,17 +57,18 @@ export default function Hero({ t }) {
             height: 4,
             background: C.orange,
             borderRadius: 2,
-            margin: "0 auto 1.5rem",
+            margin: "0 auto 1.8rem",
           }}
         />
 
         <p
           style={{
             color: "rgba(255,255,255,0.72)",
-            fontSize: "clamp(.88rem, 1.3vw, 1.05rem)",
-            lineHeight: 1.8,
-            maxWidth: 780,
-            margin: "0 auto 2.5rem",
+            fontSize: "clamp(.9rem, 1.2vw, 1.05rem)",
+            lineHeight: 1.85,
+            maxWidth: 920,
+            width: "100%",
+            margin: "0 auto 3rem",
             whiteSpace: "pre-line",
             textAlign: "center",
           }}
@@ -74,6 +76,7 @@ export default function Hero({ t }) {
           {t.hero.sub}
         </p>
 
+        {/* Bouton scroll — version originale */}
         <a
           href="#about"
           aria-label="Découvrir la suite"
@@ -89,7 +92,6 @@ export default function Hero({ t }) {
             fontSize: "1.4rem",
             animation: "pulse 2s ease-in-out infinite",
             boxShadow: "0 4px 20px rgba(232,73,29,0.4)",
-            flexShrink: 0,
           }}
         >
           ↓

@@ -100,3 +100,84 @@ img { max-width: 100%; height: auto; }
     width: min(220px, 70vw) !important;
   }
 }
+
+/* ── Affordances : éléments cliquables bien visibles ── */
+
+/* Curseur pointer partout où c'est cliquable */
+a, button, [role="button"], [onClick] {
+  cursor: pointer;
+}
+
+/* Cartes projets : indication hover claire */
+.project-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::after {
+  content: "Voir le projet →";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(232,73,29,0.92), transparent);
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 2rem 1rem 1rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+}
+
+.project-card:hover::after,
+.project-card:focus-within::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Focus clavier visible sur toutes les cartes */
+.project-card:focus-visible {
+  outline: 3px solid #e8491d;
+  outline-offset: 3px;
+}
+
+/* Boutons nav : underline animé au hover */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e8491d;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .2s;
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Touch : agrandir zones cliquables sur mobile */
+@media (max-width: 768px) {
+  .project-card::after {
+    /* Sur mobile, toujours visible car pas de hover */
+    opacity: 1;
+    transform: translateY(0);
+    background: linear-gradient(to top, rgba(232,73,29,0.85), transparent);
+  }
+
+  a, button {
+    min-height: 44px; /* Taille minimale recommandée WCAG */
+    display: inline-flex;
+    align-items: center;
+  }
+}

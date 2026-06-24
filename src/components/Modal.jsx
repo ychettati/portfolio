@@ -3,15 +3,11 @@ import { C } from "../constants/colors";
 
 export default function Modal({ project, onClose, t }) {
   const [zoomed, setZoomed] = useState(false);
-
   const displayedImage = project.modalImage || project.image;
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, []);
 
   return (
@@ -37,7 +33,7 @@ export default function Modal({ project, onClose, t }) {
           width: "100%",
           maxHeight: "90vh",
           overflowY: "auto",
-          padding: "2.5rem",
+          padding: "2rem clamp(1.2rem, 5vw, 2.5rem)",
           position: "relative",
           animation: "fadeUp .3s ease",
         }}
@@ -46,7 +42,7 @@ export default function Modal({ project, onClose, t }) {
           style={{
             fontFamily: "Montserrat,sans-serif",
             fontWeight: 800,
-            fontSize: "1.5rem",
+            fontSize: "clamp(1.1rem, 4vw, 1.5rem)",
             color: C.dark,
             marginBottom: ".25rem",
           }}
@@ -54,36 +50,20 @@ export default function Modal({ project, onClose, t }) {
           {project.name}
         </h2>
 
-        <p
-          style={{
-            color: C.muted,
-            fontSize: ".85rem",
-            marginBottom: "1.25rem",
-            fontStyle: "italic",
-          }}
-        >
+        <p style={{ color: C.muted, fontSize: ".85rem", marginBottom: "1.25rem", fontStyle: "italic" }}>
           {project.type}
         </p>
 
-        <div
-          style={{
-            width: 50,
-            height: 3,
-            background: C.orange,
-            borderRadius: 2,
-            marginBottom: "1.5rem",
-          }}
-        />
+        <div style={{ width: 50, height: 3, background: C.orange, borderRadius: 2, marginBottom: "1.5rem" }} />
 
         <div
           style={{
             width: "100%",
-            height: 300,
+            height: "clamp(180px, 40vw, 300px)",
             borderRadius: 8,
             marginBottom: "1.5rem",
             overflow: "hidden",
             background: "#fff",
-            border: "none",
           }}
         >
           {displayedImage ? (
@@ -103,57 +83,23 @@ export default function Modal({ project, onClose, t }) {
               <img
                 src={displayedImage}
                 alt={`Aperçu du projet ${project.name}`}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  display: "block",
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
               />
             </button>
           ) : (
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ fontSize: "4rem" }}>{project.emoji}</span>
             </div>
           )}
         </div>
 
-        <p
-          style={{
-            color: C.text,
-            lineHeight: 1.75,
-            marginBottom: "1.25rem",
-            whiteSpace: "pre-line",
-          }}
-        >
+        <p style={{ color: C.text, lineHeight: 1.75, marginBottom: "1.25rem", whiteSpace: "pre-line" }}>
           {project.desc}
         </p>
 
-        <div
-          style={{
-            width: 50,
-            height: 3,
-            background: C.orange,
-            borderRadius: 2,
-            margin: "1.25rem 0",
-          }}
-        />
+        <div style={{ width: 50, height: 3, background: C.orange, borderRadius: 2, margin: "1.25rem 0" }} />
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.5rem",
-            marginBottom: "1rem",
-          }}
-        >
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
           {project.tech.map((tech) => (
             <span
               key={tech}
@@ -173,32 +119,28 @@ export default function Modal({ project, onClose, t }) {
           ))}
         </div>
 
-        <p
-          style={{
-            fontSize: ".8rem",
-            color: C.muted,
-            marginBottom: "1.5rem",
-          }}
-        >
+        <p style={{ fontSize: ".8rem", color: C.muted, marginBottom: "1.5rem" }}>
           <strong style={{ color: C.dark }}>Rôle :</strong> {project.role}
         </p>
 
+        {/* ── Boutons footer — égaux et responsifs ── */}
         <div
           style={{
-            display: "flex",
-            gap: "1rem",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: "grid",
+            gridTemplateColumns: project.repo ? "1fr 1fr" : "1fr",
+            gap: "0.75rem",
           }}
         >
-          {project.repo ? (
+          {project.repo && (
             <a
               href={project.repo}
               target="_blank"
               rel="noreferrer"
               style={{
-                display: "inline-block",
-                padding: "10px 24px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "12px 16px",
                 background: C.orange,
                 color: "#fff",
                 borderRadius: 999,
@@ -207,21 +149,23 @@ export default function Modal({ project, onClose, t }) {
                 fontSize: ".8rem",
                 textTransform: "uppercase",
                 letterSpacing: ".06em",
+                textAlign: "center",
+                lineHeight: 1.3,
+                minHeight: 48,
               }}
             >
               {t.seeRepo}
             </a>
-          ) : (
-            <span />
           )}
 
           <button
             onClick={onClose}
             style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: 6,
-              padding: "10px 20px",
+              padding: "12px 16px",
               background: C.dark,
               color: "#fff",
               border: "none",
@@ -232,6 +176,7 @@ export default function Modal({ project, onClose, t }) {
               textTransform: "uppercase",
               letterSpacing: ".06em",
               cursor: "pointer",
+              minHeight: 48,
             }}
           >
             ✕ {t.back}
@@ -241,10 +186,7 @@ export default function Modal({ project, onClose, t }) {
 
       {zoomed && displayedImage && (
         <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setZoomed(false);
-          }}
+          onClick={(e) => { e.stopPropagation(); setZoomed(false); }}
           style={{
             position: "fixed",
             inset: 0,
@@ -268,12 +210,8 @@ export default function Modal({ project, onClose, t }) {
               background: "#fff",
             }}
           />
-
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setZoomed(false);
-            }}
+            onClick={(e) => { e.stopPropagation(); setZoomed(false); }}
             style={{
               position: "absolute",
               top: 20,
