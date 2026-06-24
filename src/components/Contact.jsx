@@ -1,37 +1,27 @@
 import { useState } from "react";
+import { Mail, Phone, MapPin, CalendarCheck } from "lucide-react";
 import { C } from "../constants/colors";
 import SectionTitle from "./SectionTitle";
 import ParticleCanvas from "./ParticleCanvas";
 
-const EMAILJS_SERVICE = "service_u119x4a";
+const EMAILJS_SERVICE  = "service_u119x4a";
 const EMAILJS_TEMPLATE = "template_by68smf";
-const EMAILJS_KEY = "KJrFstw4NPrXJtsEB";
+const EMAILJS_KEY      = "KJrFstw4NPrXJtsEB";
 
 export default function Contact({ t }) {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
+  const [form, setForm]     = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("idle");
 
   const handleChange = (e) => {
     setStatus("idle");
-
-    setForm((f) => ({
-      ...f,
-      [e.target.name]: e.target.value,
-    }));
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async () => {
-    const name = form.name.trim();
-    const email = form.email.trim();
+    const name    = form.name.trim();
+    const email   = form.email.trim();
     const message = form.message.trim();
 
     if (!name || !email || !message || !isValidEmail(email)) {
@@ -44,18 +34,12 @@ export default function Contact({ t }) {
     try {
       const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          service_id: EMAILJS_SERVICE,
-          template_id: EMAILJS_TEMPLATE,
-          user_id: EMAILJS_KEY,
-          template_params: {
-            from_name: name,
-            from_email: email,
-            message: message,
-          },
+          service_id:      EMAILJS_SERVICE,
+          template_id:     EMAILJS_TEMPLATE,
+          user_id:         EMAILJS_KEY,
+          template_params: { from_name: name, from_email: email, message },
         }),
       });
 
@@ -63,12 +47,9 @@ export default function Contact({ t }) {
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
       } else {
-        const errorText = await res.text();
-        console.error("EmailJS error:", errorText);
         setStatus("error");
       }
-    } catch (err) {
-      console.error("EmailJS network error:", err);
+    } catch {
       setStatus("error");
     }
   };
@@ -86,30 +67,33 @@ export default function Contact({ t }) {
     transition: "border-color .2s",
   };
 
+  const infoItems = [
+    { Icon: Mail,          label: t.contact.emailLabel,    val: "chettatiyasmne17@gmail.com", href: "mailto:chettatiyasmne17@gmail.com" },
+    { Icon: Phone,         label: t.contact.phoneLabel,    val: "07 49 87 37 73",              href: "tel:0749873773" },
+    { Icon: MapPin,        label: t.contact.locationLabel, val: t.contact.locationValue,       href: null },
+    { Icon: CalendarCheck, label: t.contact.availableLabel,val: t.contact.availableValue,      href: null },
+  ];
+
   return (
     <>
+      {/* Bandeau CV */}
       <div
         style={{
           position: "relative",
           background: C.darker,
           padding: "4rem clamp(1.5rem,8vw,8rem)",
           overflow: "hidden",
+          textAlign: "center",
         }}
       >
         <ParticleCanvas dark={true} />
 
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            textAlign: "center",
-          }}
-        >
+        <div style={{ position: "relative", zIndex: 1 }}>
           <h2
             style={{
               fontFamily: "Montserrat,sans-serif",
               fontWeight: 800,
-              fontSize: "clamp(1.2rem,3vw,1.8rem)",
+              fontSize: "clamp(1.1rem,3vw,1.8rem)",
               color: "#fff",
               marginBottom: "1.5rem",
             }}
@@ -147,6 +131,7 @@ export default function Contact({ t }) {
         </div>
       </div>
 
+      {/* Section contact */}
       <section
         id="contact"
         style={{
@@ -157,60 +142,45 @@ export default function Contact({ t }) {
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <SectionTitle sub={t.contact.sub}>{t.contact.title}</SectionTitle>
 
+          {/* Grille responsive via classe CSS */}
           <div
+            className="contact-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1.4fr",
-              gap: "3rem",
+              gap: "2rem",
               alignItems: "start",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "1.2rem",
-              }}
-            >
-              {[
-                {
-                  icon: "✉️",
-                  label: t.contact.emailLabel,
-                  val: "chettatiyasmne17@gmail.com",
-                  href: "mailto:chettatiyasmne17@gmail.com",
-                },
-                {
-                  icon: "📱",
-                  label: t.contact.phoneLabel,
-                  val: "07 49 87 37 73",
-                  href: "tel:0749873773",
-                },
-                {
-                  icon: "📍",
-                  label: t.contact.locationLabel,
-                  val: "Mobile sur toute la France",
-                  href: null,
-                },
-                {
-                  icon: "🎓",
-                  label: t.contact.availableLabel,
-                  val: "Septembre 2026",
-                  href: null,
-                },
-              ].map((item, i) => (
+            {/* Infos */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {infoItems.map((item, i) => (
                 <div
                   key={i}
                   style={{
                     background: "#fff",
                     borderRadius: 8,
-                    padding: "1.2rem 1.4rem",
+                    padding: "1.1rem 1.2rem",
                     boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
                     display: "flex",
                     gap: "1rem",
                     alignItems: "flex-start",
                   }}
                 >
-                  <span style={{ fontSize: "1.4rem" }}>{item.icon}</span>
+                  <div
+                    style={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      background: C.orange + "18",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <item.Icon size={20} color={C.orange} strokeWidth={2.2} />
+                  </div>
 
                   <div>
                     <p
@@ -235,23 +205,15 @@ export default function Contact({ t }) {
                           color: C.dark,
                           fontWeight: 600,
                           transition: "color .2s",
+                          wordBreak: "break-all",
                         }}
-                        onMouseEnter={(e) => {
-                          e.target.style.color = C.orange;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.color = C.dark;
-                        }}
+                        onMouseEnter={(e) => { e.target.style.color = C.orange; }}
+                        onMouseLeave={(e) => { e.target.style.color = C.dark; }}
                       >
                         {item.val}
                       </a>
                     ) : (
-                      <p
-                        style={{
-                          fontSize: ".88rem",
-                          color: C.text,
-                        }}
-                      >
+                      <p style={{ fontSize: ".88rem", color: C.text }}>
                         {item.val}
                       </p>
                     )}
@@ -260,6 +222,7 @@ export default function Contact({ t }) {
               ))}
             </div>
 
+            {/* Formulaire */}
             <div
               style={{
                 background: "#fff",
@@ -280,78 +243,44 @@ export default function Contact({ t }) {
                 {t.contact.formTitle}
               </h3>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                }}
-              >
-                <div>
-                  <label
-                    style={{
-                      fontFamily: "Montserrat,sans-serif",
-                      fontWeight: 700,
-                      fontSize: ".75rem",
-                      color: C.orange,
-                      textTransform: "uppercase",
-                      letterSpacing: ".06em",
-                      display: "block",
-                      marginBottom: ".4rem",
-                    }}
-                  >
-                    {t.contact.formName} *
-                  </label>
-
-                  <input
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder={t.contact.formNamePh}
-                    style={inputStyle}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = C.orange;
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#ddd";
-                    }}
-                  />
-                </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {[
+                  { name: "name",    label: t.contact.formName,    ph: t.contact.formNamePh,    type: "text" },
+                  { name: "email",   label: t.contact.formEmail,   ph: t.contact.formEmailPh,   type: "email" },
+                ].map(({ name, label, ph, type }) => (
+                  <div key={name}>
+                    <label
+                      htmlFor={`contact-${name}`}
+                      style={{
+                        fontFamily: "Montserrat,sans-serif",
+                        fontWeight: 700,
+                        fontSize: ".75rem",
+                        color: C.orange,
+                        textTransform: "uppercase",
+                        letterSpacing: ".06em",
+                        display: "block",
+                        marginBottom: ".4rem",
+                      }}
+                    >
+                      {label} *
+                    </label>
+                    <input
+                      id={`contact-${name}`}
+                      name={name}
+                      type={type}
+                      value={form[name]}
+                      onChange={handleChange}
+                      placeholder={ph}
+                      style={inputStyle}
+                      onFocus={(e) => { e.target.style.borderColor = C.orange; }}
+                      onBlur={(e)  => { e.target.style.borderColor = "#ddd"; }}
+                    />
+                  </div>
+                ))}
 
                 <div>
                   <label
-                    style={{
-                      fontFamily: "Montserrat,sans-serif",
-                      fontWeight: 700,
-                      fontSize: ".75rem",
-                      color: C.orange,
-                      textTransform: "uppercase",
-                      letterSpacing: ".06em",
-                      display: "block",
-                      marginBottom: ".4rem",
-                    }}
-                  >
-                    {t.contact.formEmail} *
-                  </label>
-
-                  <input
-                    name="email"
-                    type="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder={t.contact.formEmailPh}
-                    style={inputStyle}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = C.orange;
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#ddd";
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label
+                    htmlFor="contact-message"
                     style={{
                       fontFamily: "Montserrat,sans-serif",
                       fontWeight: 700,
@@ -365,77 +294,53 @@ export default function Contact({ t }) {
                   >
                     {t.contact.formMessage} *
                   </label>
-
                   <textarea
+                    id="contact-message"
                     name="message"
                     value={form.message}
                     onChange={handleChange}
                     placeholder={t.contact.formMessagePh}
                     rows={5}
-                    style={{
-                      ...inputStyle,
-                      resize: "vertical",
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = C.orange;
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#ddd";
-                    }}
+                    style={{ ...inputStyle, resize: "vertical" }}
+                    onFocus={(e) => { e.target.style.borderColor = C.orange; }}
+                    onBlur={(e)  => { e.target.style.borderColor = "#ddd"; }}
                   />
                 </div>
 
                 {status === "success" && (
-                  <p
-                    style={{
-                      color: "#2e7d32",
-                      fontFamily: "Montserrat,sans-serif",
-                      fontWeight: 600,
-                      fontSize: ".85rem",
-                      background: "#e8f5e9",
-                      padding: "10px 14px",
-                      borderRadius: 6,
-                    }}
-                  >
+                  <p style={{
+                    color: "#2e7d32", fontFamily: "Montserrat,sans-serif",
+                    fontWeight: 600, fontSize: ".85rem",
+                    background: "#e8f5e9", padding: "10px 14px", borderRadius: 6,
+                  }}>
                     ✓ {t.contact.formSuccess}
                   </p>
                 )}
 
                 {status === "missing" && (
-                  <p
-                    style={{
-                      color: "#c62828",
-                      fontFamily: "Montserrat,sans-serif",
-                      fontWeight: 600,
-                      fontSize: ".85rem",
-                      background: "#ffebee",
-                      padding: "10px 14px",
-                      borderRadius: 6,
-                    }}
-                  >
-                    ✗ Veuillez remplir tous les champs avec une adresse email valide.
+                  <p style={{
+                    color: "#c62828", fontFamily: "Montserrat,sans-serif",
+                    fontWeight: 600, fontSize: ".85rem",
+                    background: "#ffebee", padding: "10px 14px", borderRadius: 6,
+                  }}>
+                    ✗ {t.contact.formError}
                   </p>
                 )}
 
                 {status === "error" && (
-                  <p
-                    style={{
-                      color: "#c62828",
-                      fontFamily: "Montserrat,sans-serif",
-                      fontWeight: 600,
-                      fontSize: ".85rem",
-                      background: "#ffebee",
-                      padding: "10px 14px",
-                      borderRadius: 6,
-                    }}
-                  >
-                    ✗ Le message n’a pas pu être envoyé. Vérifiez la configuration EmailJS.
+                  <p style={{
+                    color: "#c62828", fontFamily: "Montserrat,sans-serif",
+                    fontWeight: 600, fontSize: ".85rem",
+                    background: "#ffebee", padding: "10px 14px", borderRadius: 6,
+                  }}>
+                    ✗ Le message n'a pas pu être envoyé. Vérifiez la configuration EmailJS.
                   </p>
                 )}
 
                 <button
                   onClick={handleSubmit}
                   disabled={status === "sending"}
+                  aria-busy={status === "sending"}
                   style={{
                     padding: "13px 32px",
                     background: status === "sending" ? "#aaa" : C.orange,
@@ -449,22 +354,16 @@ export default function Contact({ t }) {
                     textTransform: "uppercase",
                     letterSpacing: ".08em",
                     alignSelf: "flex-start",
-                    transition: "background .2s, transform .15s",
+                    transition: "background .2s",
                   }}
                   onMouseEnter={(e) => {
-                    if (status !== "sending") {
-                      e.currentTarget.style.background = C.orangeHover;
-                    }
+                    if (status !== "sending") e.currentTarget.style.background = C.orangeHover;
                   }}
                   onMouseLeave={(e) => {
-                    if (status !== "sending") {
-                      e.currentTarget.style.background = C.orange;
-                    }
+                    if (status !== "sending") e.currentTarget.style.background = C.orange;
                   }}
                 >
-                  {status === "sending"
-                    ? t.contact.formSending
-                    : t.contact.formSend}
+                  {status === "sending" ? t.contact.formSending : t.contact.formSend}
                 </button>
               </div>
             </div>

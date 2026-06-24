@@ -27,36 +27,76 @@ body {
   min-height: 100vh;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #e8491d; border-radius: 3px; }
 
-::-webkit-scrollbar-thumb {
-  background: #e8491d;
-  border-radius: 3px;
-}
+a { text-decoration: none; color: inherit; }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+img { max-width: 100%; height: auto; }
 
+/* ── Animations ── */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: none; }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+/* ── Accessibilité ── */
+:focus-visible {
+  outline: 3px solid #e8491d;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-  50% {
-    transform: scale(1.08);
+}
+
+/* ── Nav responsive ── */
+.nav-desktop  { display: flex; }
+.nav-hamburger { display: none; }
+
+@media (max-width: 768px) {
+  .nav-desktop   { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+}
+
+/* ── Timeline responsive ── */
+@media (max-width: 700px) {
+  .timeline-line {
+    left: 20px !important;
+    transform: none !important;
+  }
+  .timeline-dot {
+    left: 20px !important;
+    transform: translateX(-50%) !important;
+  }
+  .timeline-row {
+    justify-content: flex-end !important;
+  }
+  .timeline-card {
+    width: calc(100% - 52px) !important;
+    text-align: left !important;
+  }
+}
+
+/* ── Contact grid responsive ── */
+@media (max-width: 700px) {
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── About grid responsive ── */
+@media (max-width: 600px) {
+  .about-photo {
+    width: min(220px, 70vw) !important;
   }
 }

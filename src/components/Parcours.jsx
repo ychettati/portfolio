@@ -7,14 +7,18 @@ export default function Parcours({ t }) {
       id="parcours"
       style={{
         background: "#fff",
-        padding: "5rem clamp(1.5rem,8vw,8rem)",
+        padding: "5rem clamp(1.5rem, 8vw, 8rem)",
       }}
     >
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <SectionTitle sub={t.parcours.sub}>{t.parcours.title}</SectionTitle>
 
         <div style={{ position: "relative" }}>
+
+          {/* Ligne verticale centrale */}
           <div
+            aria-hidden="true"
+            className="timeline-line"
             style={{
               position: "absolute",
               left: "50%",
@@ -28,10 +32,10 @@ export default function Parcours({ t }) {
 
           {t.parcours.items.map((item, i) => {
             const left = i % 2 === 0;
-
             return (
               <div
                 key={i}
+                className="timeline-row"
                 style={{
                   display: "flex",
                   justifyContent: left ? "flex-start" : "flex-end",
@@ -39,7 +43,10 @@ export default function Parcours({ t }) {
                   position: "relative",
                 }}
               >
+                {/* Dot */}
                 <div
+                  aria-hidden="true"
+                  className="timeline-dot"
                   style={{
                     position: "absolute",
                     left: "50%",
@@ -55,7 +62,9 @@ export default function Parcours({ t }) {
                   }}
                 />
 
+                {/* Carte */}
                 <div
+                  className="timeline-card"
                   style={{
                     width: "43%",
                     background: C.light,
@@ -85,11 +94,7 @@ export default function Parcours({ t }) {
                       fontWeight: 700,
                       fontSize: ".98rem",
                       color: C.dark,
-                      marginBottom: item.location
-                        ? ".2rem"
-                        : item.desc
-                        ? ".45rem"
-                        : 0,
+                      marginBottom: item.location || item.desc ? ".3rem" : 0,
                     }}
                   >
                     {item.title}
