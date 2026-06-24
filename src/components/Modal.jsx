@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ZoomIn, X, ArrowLeft, ExternalLink } from "lucide-react";
 import { C } from "../constants/colors";
 
 export default function Modal({ project, onClose, t }) {
@@ -10,6 +11,15 @@ export default function Modal({ project, onClose, t }) {
     return () => { document.body.style.overflow = ""; };
   }, []);
 
+  // Fermer avec Escape
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") zoomed ? setZoomed(false) : onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [zoomed, onClose]);
+
   return (
     <div
       onClick={onClose}
@@ -17,7 +27,7 @@ export default function Modal({ project, onClose, t }) {
         position: "fixed",
         inset: 0,
         zIndex: 200,
-        background: "rgba(0,0,0,0.7)",
+        background: "rgba(0,0,0,0.75)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -28,7 +38,7 @@ export default function Modal({ project, onClose, t }) {
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#fff",
-          borderRadius: 8,
+          borderRadius: 12,
           maxWidth: 760,
           width: "100%",
           maxHeight: "90vh",
@@ -38,15 +48,44 @@ export default function Modal({ project, onClose, t }) {
           animation: "fadeUp .3s ease",
         }}
       >
-        <h2
+        {/* Bouton fermer en haut à droite */}
+        <button
+          onClick={onClose}
+          aria-label="Fermer"
           style={{
-            fontFamily: "Montserrat,sans-serif",
-            fontWeight: 800,
-            fontSize: "clamp(1.1rem, 4vw, 1.5rem)",
+            position: "sticky",
+            top: 0,
+            float: "right",
+            marginLeft: "1rem",
+            marginBottom: ".5rem",
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            border: "none",
+            background: "#f0f0f0",
             color: C.dark,
-            marginBottom: ".25rem",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            zIndex: 10,
+            transition: "background .2s",
           }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = C.orange; e.currentTarget.style.color = "#fff"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "#f0f0f0"; e.currentTarget.style.color = C.dark; }}
         >
+          <X size={16} strokeWidth={2.5} />
+        </button>
+
+        <h2 style={{
+          fontFamily: "Montserrat,sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(1.1rem, 4vw, 1.5rem)",
+          color: C.dark,
+          marginBottom: ".25rem",
+          paddingRight: "2.5rem",
+        }}>
           {project.name}
         </h2>
 
@@ -56,28 +95,25 @@ export default function Modal({ project, onClose, t }) {
 
         <div style={{ width: 50, height: 3, background: C.orange, borderRadius: 2, marginBottom: "1.5rem" }} />
 
-        <div
-          style={{
-            width: "100%",
-            height: "clamp(180px, 40vw, 300px)",
-            borderRadius: 8,
-            marginBottom: "1.5rem",
-            overflow: "hidden",
-            background: "#fff",
-          }}
-        >
-          {displayedImage ? (
+        {/* Image avec indication zoom claire */}
+        {displayedImage ? (
+          <div style={{ position: "relative", marginBottom: "1.5rem" }}>
             <button
               type="button"
               onClick={() => setZoomed(true)}
-              title="Cliquez pour agrandir"
+              aria-label="Agrandir l'image"
               style={{
                 width: "100%",
-                height: "100%",
+                height: "clamp(160px, 35vw, 280px)",
                 border: "none",
+                outline: "none",
+                borderRadius: 10,
                 padding: 0,
                 background: "transparent",
                 cursor: "zoom-in",
+                overflow: "hidden",
+                display: "block",
+                position: "relative",
               }}
             >
               <img
@@ -85,13 +121,40 @@ export default function Modal({ project, onClose, t }) {
                 alt={`Aperçu du projet ${project.name}`}
                 style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
               />
+
+              {/* Badge "Agrandir" toujours visible */}
+              <div style={{
+                position: "absolute",
+                bottom: 10,
+                right: 10,
+                background: "rgba(0,0,0,0.65)",
+                color: "#fff",
+                borderRadius: 999,
+                padding: "5px 12px 5px 8px",
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                fontSize: ".72rem",
+                fontFamily: "Montserrat,sans-serif",
+                fontWeight: 700,
+                letterSpacing: ".04em",
+                backdropFilter: "blur(4px)",
+                pointerEvents: "none",
+              }}>
+                <ZoomIn size={13} />
+                Agrandir
+              </div>
             </button>
-          ) : (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: "4rem" }}>{project.emoji}</span>
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div style={{
+            height: 160, borderRadius: 10, marginBottom: "1.5rem",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "#fafafa", border: "2px solid #f0f0f0",
+          }}>
+            <span style={{ fontSize: "4rem" }}>{project.emoji}</span>
+          </div>
+        )}
 
         <p style={{ color: C.text, lineHeight: 1.75, marginBottom: "1.25rem", whiteSpace: "pre-line" }}>
           {project.desc}
@@ -101,19 +164,16 @@ export default function Modal({ project, onClose, t }) {
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
           {project.tech.map((tech) => (
-            <span
-              key={tech}
-              style={{
-                background: "#f5f5f5",
-                border: "1px solid #e0e0e0",
-                borderRadius: 4,
-                padding: "3px 10px",
-                fontSize: ".75rem",
-                fontFamily: "Montserrat,sans-serif",
-                fontWeight: 600,
-                color: C.dark,
-              }}
-            >
+            <span key={tech} style={{
+              background: "#f5f5f5",
+              border: "1px solid #e0e0e0",
+              borderRadius: 4,
+              padding: "3px 10px",
+              fontSize: ".75rem",
+              fontFamily: "Montserrat,sans-serif",
+              fontWeight: 600,
+              color: C.dark,
+            }}>
               {tech}
             </span>
           ))}
@@ -123,14 +183,12 @@ export default function Modal({ project, onClose, t }) {
           <strong style={{ color: C.dark }}>Rôle :</strong> {project.role}
         </p>
 
-        {/* ── Boutons footer — égaux et responsifs ── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: project.repo ? "1fr 1fr" : "1fr",
-            gap: "0.75rem",
-          }}
-        >
+        {/* Boutons égaux en grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: project.repo ? "1fr 1fr" : "1fr",
+          gap: "0.75rem",
+        }}>
           {project.repo && (
             <a
               href={project.repo}
@@ -140,7 +198,8 @@ export default function Modal({ project, onClose, t }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "12px 16px",
+                gap: 7,
+                padding: "13px 16px",
                 background: C.orange,
                 color: "#fff",
                 borderRadius: 999,
@@ -149,11 +208,13 @@ export default function Modal({ project, onClose, t }) {
                 fontSize: ".8rem",
                 textTransform: "uppercase",
                 letterSpacing: ".06em",
-                textAlign: "center",
-                lineHeight: 1.3,
                 minHeight: 48,
+                transition: "background .2s",
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = C.orangeHover; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = C.orange; }}
             >
+              <ExternalLink size={15} />
               {t.seeRepo}
             </a>
           )}
@@ -164,8 +225,8 @@ export default function Modal({ project, onClose, t }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6,
-              padding: "12px 16px",
+              gap: 7,
+              padding: "13px 16px",
               background: C.dark,
               color: "#fff",
               border: "none",
@@ -177,57 +238,90 @@ export default function Modal({ project, onClose, t }) {
               letterSpacing: ".06em",
               cursor: "pointer",
               minHeight: 48,
+              transition: "background .2s",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#444"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = C.dark; }}
           >
-            ✕ {t.back}
+            <ArrowLeft size={15} />
+            {t.back}
           </button>
         </div>
       </div>
 
+      {/* ── Zoom plein écran ── */}
       {zoomed && displayedImage && (
         <div
-          onClick={(e) => { e.stopPropagation(); setZoomed(false); }}
+          onClick={() => setZoomed(false)}
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 300,
-            background: "rgba(0,0,0,0.92)",
+            background: "rgba(0,0,0,0.95)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "1.5rem",
+            padding: "1rem",
             cursor: "zoom-out",
           }}
         >
+          {/* Instructions mobile */}
+          <div style={{
+            position: "absolute",
+            top: 16,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(255,255,255,0.12)",
+            color: "rgba(255,255,255,0.8)",
+            borderRadius: 999,
+            padding: "6px 16px",
+            fontSize: ".72rem",
+            fontFamily: "Montserrat,sans-serif",
+            fontWeight: 600,
+            letterSpacing: ".04em",
+            backdropFilter: "blur(4px)",
+            whiteSpace: "nowrap",
+            pointerEvents: "none",
+          }}>
+            Appuyez n'importe où pour fermer
+          </div>
+
           <img
             src={displayedImage}
             alt={`Aperçu agrandi du projet ${project.name}`}
             style={{
               maxWidth: "95vw",
-              maxHeight: "90vh",
+              maxHeight: "85vh",
               objectFit: "contain",
               borderRadius: 8,
-              background: "#fff",
+              boxShadow: "0 0 60px rgba(0,0,0,0.5)",
             }}
           />
+
+          {/* Bouton fermer zoom */}
           <button
             onClick={(e) => { e.stopPropagation(); setZoomed(false); }}
+            aria-label="Fermer le zoom"
             style={{
               position: "absolute",
-              top: 20,
-              right: 20,
-              width: 42,
-              height: 42,
+              top: 16,
+              right: 16,
+              width: 44,
+              height: 44,
               borderRadius: "50%",
               border: "none",
               background: "#fff",
               color: C.dark,
-              fontSize: "1.2rem",
+              fontSize: "1rem",
               fontWeight: 800,
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
             }}
           >
-            ✕
+            <X size={18} strokeWidth={2.5} />
           </button>
         </div>
       )}

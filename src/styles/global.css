@@ -181,3 +181,24 @@ a, button, [role="button"], [onClick] {
     align-items: center;
   }
 }
+
+/* ── Overlay hover cartes projets ── */
+[role="button"]:hover .card-overlay,
+[role="button"]:focus-visible .card-overlay {
+  opacity: 1 !important;
+}
+
+/* Sur mobile : overlay toujours semi-visible */
+@media (hover: none) {
+  .card-overlay {
+    opacity: 0.7 !important;
+    background: linear-gradient(to top, rgba(232,73,29,0.7) 0%, transparent 55%) !important;
+  }
+}
+
+/* Focus clavier sur cartes */
+[role="button"]:focus-visible {
+  outline: 3px solid #e8491d !important;
+  outline-offset: 3px;
+  border-radius: 10px;
+}
