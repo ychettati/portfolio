@@ -3,9 +3,9 @@ import { C } from "../constants/colors";
 import SectionTitle from "./SectionTitle";
 import ParticleCanvas from "./ParticleCanvas";
 
-const EMAILJS_SERVICE = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE = "YOUR_TEMPLATE_ID";
-const EMAILJS_KEY = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE = "service_u119x4a";
+const EMAILJS_TEMPLATE = "template_by68smf";
+const EMAILJS_KEY = "KJrFstw4NPrXJtsEB";
 
 export default function Contact({ t }) {
   const [form, setForm] = useState({
@@ -16,15 +16,26 @@ export default function Contact({ t }) {
 
   const [status, setStatus] = useState("idle");
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
+    setStatus("idle");
+
     setForm((f) => ({
       ...f,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) {
-      setStatus("error");
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const message = form.message.trim();
+
+    if (!name || !email || !message || !isValidEmail(email)) {
+      setStatus("missing");
       return;
     }
 
@@ -41,9 +52,9 @@ export default function Contact({ t }) {
           template_id: EMAILJS_TEMPLATE,
           user_id: EMAILJS_KEY,
           template_params: {
-            from_name: form.name,
-            from_email: form.email,
-            message: form.message,
+            from_name: name,
+            from_email: email,
+            message: message,
           },
         }),
       });
@@ -52,9 +63,12 @@ export default function Contact({ t }) {
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
       } else {
+        const errorText = await res.text();
+        console.error("EmailJS error:", errorText);
         setStatus("error");
       }
-    } catch {
+    } catch (err) {
+      console.error("EmailJS network error:", err);
       setStatus("error");
     }
   };
@@ -104,7 +118,8 @@ export default function Contact({ t }) {
           </h2>
 
           <a
-            href="mailto:chettatiyasmne17@gmail.com"
+            href={`${import.meta.env.BASE_URL}cv/cv-yasmine-chettati.pdf`}
+            download
             style={{
               display: "inline-block",
               padding: "14px 40px",
@@ -386,6 +401,22 @@ export default function Contact({ t }) {
                   </p>
                 )}
 
+                {status === "missing" && (
+                  <p
+                    style={{
+                      color: "#c62828",
+                      fontFamily: "Montserrat,sans-serif",
+                      fontWeight: 600,
+                      fontSize: ".85rem",
+                      background: "#ffebee",
+                      padding: "10px 14px",
+                      borderRadius: 6,
+                    }}
+                  >
+                    ✗ Veuillez remplir tous les champs avec une adresse email valide.
+                  </p>
+                )}
+
                 {status === "error" && (
                   <p
                     style={{
@@ -398,7 +429,7 @@ export default function Contact({ t }) {
                       borderRadius: 6,
                     }}
                   >
-                    ✗ {t.contact.formError}
+                    ✗ Le message n’a pas pu être envoyé. Vérifiez la configuration EmailJS.
                   </p>
                 )}
 

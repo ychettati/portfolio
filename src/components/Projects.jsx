@@ -60,13 +60,38 @@ export default function Projects({ t }) {
                 style={{
                   height: 180,
                   background: p.imgBg,
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "3.5rem",
                 }}
               >
-                {p.emoji}
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={`Illustration du projet ${p.name}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: p.imageFit || "cover",
+                      padding: p.imageFit === "contain" ? "1.5rem" : 0,
+                      display: "block",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "3.5rem",
+                    }}
+                  >
+                    {p.emoji}
+                  </div>
+                )}
               </div>
 
               <div style={{ padding: "1.4rem" }}>
@@ -87,25 +112,53 @@ export default function Projects({ t }) {
                     color: C.muted,
                     fontSize: ".78rem",
                     fontStyle: "italic",
-                    marginBottom: ".75rem",
+                    marginBottom: "1rem",
                   }}
                 >
                   {p.type}
                 </p>
 
-                <p
+                <div
                   style={{
-                    color: C.text,
-                    fontSize: ".88rem",
-                    lineHeight: 1.6,
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.45rem",
                   }}
                 >
-                  {p.desc}
-                </p>
+                  {p.tech.slice(0, 4).map((tech) => (
+                    <span
+                      key={tech}
+                      style={{
+                        background: "#f5f5f5",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: 999,
+                        padding: "4px 9px",
+                        fontSize: ".68rem",
+                        fontFamily: "Montserrat,sans-serif",
+                        fontWeight: 600,
+                        color: C.dark,
+                      }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+
+                  {p.tech.length > 4 && (
+                    <span
+                      style={{
+                        background: C.orange,
+                        borderRadius: 999,
+                        padding: "4px 9px",
+                        fontSize: ".68rem",
+                        fontFamily: "Montserrat,sans-serif",
+                        fontWeight: 700,
+                        color: "#fff",
+                      }}
+                    >
+                      +{p.tech.length - 4}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           ))}

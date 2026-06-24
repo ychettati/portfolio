@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { C } from "../constants/colors";
 
 export default function Modal({ project, onClose, t }) {
+  const [zoomed, setZoomed] = useState(false);
+
+  const displayedImage = project.modalImage || project.image;
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
@@ -29,7 +33,7 @@ export default function Modal({ project, onClose, t }) {
         style={{
           background: "#fff",
           borderRadius: 8,
-          maxWidth: 660,
+          maxWidth: 760,
           width: "100%",
           maxHeight: "90vh",
           overflowY: "auto",
@@ -74,17 +78,51 @@ export default function Modal({ project, onClose, t }) {
         <div
           style={{
             width: "100%",
-            height: 200,
-            borderRadius: 6,
+            height: 300,
+            borderRadius: 8,
             marginBottom: "1.5rem",
             overflow: "hidden",
-            background: project.imgBg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            background: "#fff",
+            border: "none",
           }}
         >
-          <span style={{ fontSize: "4rem" }}>{project.emoji}</span>
+          {displayedImage ? (
+            <button
+              type="button"
+              onClick={() => setZoomed(true)}
+              title="Cliquez pour agrandir"
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "none",
+                padding: 0,
+                background: "transparent",
+                cursor: "zoom-in",
+              }}
+            >
+              <img
+                src={displayedImage}
+                alt={`Aperçu du projet ${project.name}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </button>
+          ) : (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: "4rem" }}>{project.emoji}</span>
+            </div>
+          )}
         </div>
 
         <p
@@ -92,6 +130,7 @@ export default function Modal({ project, onClose, t }) {
             color: C.text,
             lineHeight: 1.75,
             marginBottom: "1.25rem",
+            whiteSpace: "pre-line",
           }}
         >
           {project.desc}
@@ -199,6 +238,61 @@ export default function Modal({ project, onClose, t }) {
           </button>
         </div>
       </div>
+
+      {zoomed && displayedImage && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setZoomed(false);
+          }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 300,
+            background: "rgba(0,0,0,0.92)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1.5rem",
+            cursor: "zoom-out",
+          }}
+        >
+          <img
+            src={displayedImage}
+            alt={`Aperçu agrandi du projet ${project.name}`}
+            style={{
+              maxWidth: "95vw",
+              maxHeight: "90vh",
+              objectFit: "contain",
+              borderRadius: 8,
+              background: "#fff",
+            }}
+          />
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoomed(false);
+            }}
+            style={{
+              position: "absolute",
+              top: 20,
+              right: 20,
+              width: 42,
+              height: 42,
+              borderRadius: "50%",
+              border: "none",
+              background: "#fff",
+              color: C.dark,
+              fontSize: "1.2rem",
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </div>
   );
 }

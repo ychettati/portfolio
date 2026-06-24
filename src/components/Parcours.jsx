@@ -10,7 +10,7 @@ export default function Parcours({ t }) {
         padding: "5rem clamp(1.5rem,8vw,8rem)",
       }}
     >
-      <div style={{ maxWidth: 700, margin: "0 auto" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <SectionTitle sub={t.parcours.sub}>{t.parcours.title}</SectionTitle>
 
         <div style={{ position: "relative" }}>
@@ -57,11 +57,12 @@ export default function Parcours({ t }) {
 
                 <div
                   style={{
-                    width: "45%",
+                    width: "43%",
                     background: C.light,
-                    borderRadius: 8,
+                    borderRadius: 10,
                     padding: "1.25rem 1.5rem",
                     boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
+                    textAlign: left ? "right" : "left",
                   }}
                 >
                   <p
@@ -70,35 +71,55 @@ export default function Parcours({ t }) {
                       fontWeight: 800,
                       fontSize: ".78rem",
                       color: C.orange,
-                      marginBottom: ".25rem",
+                      marginBottom: ".3rem",
                       textTransform: "uppercase",
                       letterSpacing: ".06em",
                     }}
                   >
-                    {item.date}
+                    {item.year}
                   </p>
 
                   <h3
                     style={{
                       fontFamily: "Montserrat,sans-serif",
                       fontWeight: 700,
-                      fontSize: ".95rem",
+                      fontSize: ".98rem",
                       color: C.dark,
-                      marginBottom: ".4rem",
+                      marginBottom: item.location
+                        ? ".2rem"
+                        : item.desc
+                        ? ".45rem"
+                        : 0,
                     }}
                   >
                     {item.title}
                   </h3>
 
-                  <p
-                    style={{
-                      color: C.text,
-                      fontSize: ".82rem",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {item.desc}
-                  </p>
+                  {item.location && (
+                    <p
+                      style={{
+                        color: C.muted,
+                        fontSize: ".78rem",
+                        fontStyle: "italic",
+                        marginBottom: item.desc ? ".45rem" : 0,
+                      }}
+                    >
+                      {item.location}
+                    </p>
+                  )}
+
+                  {item.desc && (
+                    <p
+                      style={{
+                        color: C.text,
+                        fontSize: ".82rem",
+                        lineHeight: 1.6,
+                        margin: 0,
+                      }}
+                    >
+                      {item.desc}
+                    </p>
+                  )}
                 </div>
               </div>
             );

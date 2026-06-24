@@ -30,11 +30,11 @@ export default function Hero({ t }) {
           style={{
             fontFamily: "Montserrat,sans-serif",
             fontWeight: 900,
-            fontSize: "clamp(2rem,6vw,4rem)",
             color: "#fff",
             textTransform: "uppercase",
             letterSpacing: "-.02em",
-            lineHeight: 1.1,
+            fontSize: "clamp(1.4rem,6vw,3.5rem)",
+            lineHeight: 1.08,
             marginBottom: "1rem",
             whiteSpace: "pre-line",
           }}
@@ -53,13 +53,15 @@ export default function Hero({ t }) {
         />
 
         <p
-          style={{
-            color: "rgba(255,255,255,0.7)",
-            fontSize: "clamp(.95rem,1.5vw,1.1rem)",
-            maxWidth: 600,
-            lineHeight: 1.7,
-            marginBottom: "2.5rem",
-          }}
+style={{
+  color: "rgba(255,255,255,0.72)",
+  fontSize: "clamp(.95rem,1.3vw,1.1rem)",
+  lineHeight: 1.8,
+  maxWidth: 780,
+  margin: "1.5rem auto 0",
+  textAlign: "center",
+  whiteSpace: "pre-line",
+}}
         >
           {t.hero.sub}
         </p>
