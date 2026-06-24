@@ -63,7 +63,7 @@ export default function Hero({ t }) {
 
         <p
           style={{
-            color: "rgba(255,255,255,0.72)",
+            color: "rgba(255,255,255,0.85)",
             fontSize: "clamp(.9rem, 1.2vw, 1.05rem)",
             lineHeight: 1.85,
             maxWidth: 920,

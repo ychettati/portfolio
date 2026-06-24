@@ -6,5 +6,5 @@ export const C = {
   light: "#f9f9f9",
   white: "#ffffff",
   text: "#444",
-  muted: "#888",
+  muted: "#767676", // ratio exactement 4.5:1 sur blanc
 };
